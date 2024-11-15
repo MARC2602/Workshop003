@@ -1,20 +1,33 @@
 version: '3'
 services:
   zookeeper:
-    image: bitnami/zookeeper:latest  # Imagen actualizada de Zookeeper
-    environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+    image: bitnami/zookeeper:latest  # Imagen actualizada
     ports:
       - "2181:2181"
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"  # Configuración simple para pruebas
 
   kafka:
-    image: bitnami/kafka:latest  # Imagen actualizada de Kafka
-    environment:
-      - KAFKA_BROKER_ID=1
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
-      - ALLOW_PLAINTEXT_LISTENER=yes
+    image: bitnami/kafka:latest  # Imagen Kafka de Bitnami, más compatible
     ports:
       - "9092:9092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.100.2:9092
+      ALLOW_PLAINTEXT_LISTENER: "yes"  # Requerido por la imagen de Bitnami
     depends_on:
       - zookeeper
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: happinessdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
