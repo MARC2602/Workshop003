@@ -3,4 +3,5 @@ env
 credentials.env
 
 Data/clean/merged.csv
+Data/clean/merged_df_with_dummies.csv
 Data/clean/features.csv
